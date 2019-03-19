@@ -144,8 +144,14 @@ static void receive_message() {
 static void lora_event_handler(lorawan_event_t event) {
   switch (event) {
     case CONNECTED:
-      printf("Connection - Successful\n");
+    {
+      printf("Connection - Successful\nSwitching to class C\n");
+      lorawan_status_t retcode = lorawan.set_device_class(CLASS_C);
+      if (retcode != LORAWAN_STATUS_OK) {
+        printf("Class change error, code = %d\n", retcode);
+      }
       break;
+    }
     case DISCONNECTED:
       ev_queue.break_dispatch();
       printf("Disconnected Successfully\n");
